@@ -1,5 +1,22 @@
-FROM ruby:2.5.3
+FROM centos
 
-RUN gem install rails
+MAINTAINER goldkou
 
-RUN apt-get update && apt-get install -y nodejs mysql-client
+LABEL title="sampleImage"\
+    version="1.0"\
+    description="This is a sample."
+
+RUN mkdir /myvol
+RUN echo "hello world" > /myvol/greeting
+VOLUME /myvol
+
+ENV hoge=hogehoge
+
+EXPOSE 80
+
+WORKDIR /tmp
+RUN ["pwd"]
+
+ADD https://github.com/docker/cli/blob/master/README.md /tmp
+
+COPY sample.txt /tmp
