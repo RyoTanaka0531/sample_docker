@@ -1,22 +1,15 @@
-version: '3'
-services:
-  mysql:
-    image: mysql:8.0.13
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - "./mysql-data:/var/lib/mysql"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
+webserver:
+  image: wordpress
+  ports:
+    - "80:80"
+  links:
+    - "dbserver:mysql"
 
-
-
-  app:
-    build: .
-    volumes:
-      - ".:/app"
-    ports:
-      - "3000:3000"
-    tty: true
-    depends_on:
-      - mysql
-    working_dir: "/app"
+dbserver:
+  image: mysql
+  depends_on:
+    - webserver
+  volumes_from:
+    - storage
+  environment:
+    MYSQL_ROOT_PASSWORD: password
